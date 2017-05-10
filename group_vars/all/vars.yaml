@@ -1,0 +1,13 @@
+---
+
+# Prefix for IAM resources (might be further modified by the DBG wide prefix)
+naming_prefix: en341-k8s-qs
+
+# AWS region
+aws_region: eu-central-1
+
+# DBG Role template URL
+template_url: https://s3.eu-central-1.amazonaws.com/init-prod-dev-s3bucket-15205kjmp3ix0/RoleGeneration/DBG-CORE-ROLE-Trigger.template
+
+# DBG prefix
+prefix: DBG-DEV-
