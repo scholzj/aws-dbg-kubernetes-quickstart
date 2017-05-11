@@ -45,8 +45,8 @@ Metadata:
         default: IAM Configuration
       Parameters:
       - LambdaIAMRole
-      - MasterIAMRole
-      - NodeIAMRole
+      - MasterInstanceProfile
+      - NodeInstanceProfile
     - Label:
         default: Access Configuration
       Parameters:
@@ -75,11 +75,11 @@ Metadata:
       ClusterSubnetId:
         default: Subnet
       LambdaIAMRole:
-        default: Name of the IAM role which should be used by toen lambda
-      MasterIAMRole:
-        default: Name of the IAM role which should be used by Master
-      NodeIAMRole:
-        default: Name of the IAM role which should be used by Nodes
+        default: Arn of the IAM role which should be used by toen lambda
+      MasterInstanceProfile:
+        default: Arn of the instance profile related to the Master IAM role
+      NodeInstanceProfile:
+        default: Arn of the instance profile related to the Node IAM role
       SSHLocation:
         default: SSH Ingress Location
       ApiLbLocation:
@@ -133,15 +133,15 @@ Parameters:
 
   LambdaIAMRole:
     Description: Name of the IAM role which should be used by token lambda
-    Type: AWS::IAM::Role::RoleName
+    Type: String
 
-  MasterIAMRole:
-    Description: Name of the IAM role which should be used by Master
-    Type: AWS::IAM::Role::RoleName
+  MasterInstanceProfile:
+    Description: Arn of the instance profile related to the Master IAM role
+    Type: String
 
-  NodeIAMRole:
-    Description: Name of the IAM role which should be used by Nodes
-    Type: AWS::IAM::Role::RoleName
+  NodeInstanceProfile:
+    Description: Arn of the instance profile related to the Node IAM role
+    Type: String
 
   # Default is t2.medium. EC2 instance type for the cluster
   # https://aws.amazon.com/ec2/instance-types/
@@ -393,7 +393,8 @@ Resources:
       # Refers to the MasterInstanceProfile resource, which applies the IAM role for the master instance
       # The IAM role allows us to create further AWS resources (like an EBS drive) from the cluster
       # This is needed for the Kubernetes-AWS cloud-provider integration
-      IamInstanceProfile: !Ref MasterInstanceProfile
+      #IamInstanceProfile: !Ref MasterInstanceProfile
+      IamInstanceProfile: MasterInstanceProfile
       # Type of instance; the default is t2.medium
       InstanceType: !Ref InstanceType
       # Adds our SSH key to the instance
@@ -647,7 +648,8 @@ Resources:
       # Refers to the NodeInstanceProfile resource, which applies the IAM role for the nodes
       # The IAM role allows us to create further AWS resources (like an EBS drive) from the cluster
       # This is needed for the Kubernetes-AWS cloud-provider integration
-      IamInstanceProfile: !Ref NodeInstanceProfile
+      #IamInstanceProfile: !Ref NodeInstanceProfile
+      IamInstanceProfile: NodeInstanceProfile
       # http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-instance.html#cfn-ec2-instance-imageid
       ImageId:
         Fn::FindInMap:
@@ -804,13 +806,13 @@ Resources:
   #           Resource: !Sub ["${LogGroupArn}:*", LogGroupArn: !GetAtt KubernetesLogGroup.Arn]
 
   # Resource that creates the node IAM role
-  NodeInstanceProfile:
-    Type: AWS::IAM::InstanceProfile
-    Properties:
-      Path: "/"
-      Roles:
-      - NodeIAMRole
-      #- !Ref NodeRole
+  # NodeInstanceProfile:
+  #   Type: AWS::IAM::InstanceProfile
+  #   Properties:
+  #     Path: "/"
+  #     Roles:
+  #     - NodeIAMRole
+  #     #- !Ref NodeRole
 
   # IAM role for the master node http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html
   # MasterRole:
@@ -862,13 +864,13 @@ Resources:
   #           Resource: !Sub ["${LogGroupArn}:*", LogGroupArn: !GetAtt KubernetesLogGroup.Arn]
 
   # Resource that creates the master node IAM role
-  MasterInstanceProfile:
-    Type: AWS::IAM::InstanceProfile
-    Properties:
-      Path: "/"
-      Roles:
-      - MasterIAMRole
-      #- !Ref MasterRole
+  # MasterInstanceProfile:
+  #   Type: AWS::IAM::InstanceProfile
+  #   Properties:
+  #     Path: "/"
+  #     Roles:
+  #     - MasterIAMRole
+  #     #- !Ref MasterRole
 
   # Create a placeholder load balancer for the API server. Backend instances will be added by the master itself on the
   # first boot in the startup script above.
