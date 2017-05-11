@@ -413,6 +413,20 @@ Resources:
       Tags:
       - Key: Name
         Value: k8s-master
+      - Key: Product
+        Value: Risk
+      - Key: CostCenter
+        Value: Risk
+      - Key: Owner
+        Value: en341
+      - Key: Creator
+        Value: en341
+      - Key: Application
+        Value: MDH
+      - Key: Environment
+        Value: DEV
+      - Key: Confidentiality
+        Value: None
       - Key: KubernetesCluster
         Value:
           Fn::If:
@@ -567,6 +581,27 @@ Resources:
       - Key: Name
         Value: k8s-node
         PropagateAtLaunch: 'true'
+      - Key: Product
+        Value: Risk
+        PropagateAtLaunch: 'true'
+      - Key: CostCenter
+        Value: Risk
+        PropagateAtLaunch: 'true'
+      - Key: Owner
+        Value: en341
+        PropagateAtLaunch: 'true'
+      - Key: Creator
+        Value: en341
+        PropagateAtLaunch: 'true'
+      - Key: Application
+        Value: MDH
+        PropagateAtLaunch: 'true'
+      - Key: Environment
+        Value: DEV
+        PropagateAtLaunch: 'true'
+      - Key: Confidentiality
+        Value: None
+        PropagateAtLaunch: 'true'
       - Key: KubernetesCluster
         Value:
           Fn::If:
@@ -672,6 +707,20 @@ Resources:
           - !Ref AWS::StackName
       - Key: Name
         Value: k8s-cluster-security-group
+      - Key: Product
+        Value: Risk
+      - Key: CostCenter
+        Value: Risk
+      - Key: Owner
+        Value: en341
+      - Key: Creator
+        Value: en341
+      - Key: Application
+        Value: MDH
+      - Key: Environment
+        Value: DEV
+      - Key: Confidentiality
+        Value: None
 
   # Permissions we add to the main security group:
   # - Ensure cluster machines can talk to one another
@@ -850,6 +899,20 @@ Resources:
           - !Ref AWS::StackName
       - Key: 'kubernetes.io/service-name'
         Value: 'kube-system/apiserver-public'
+      - Key: Product
+        Value: Risk
+      - Key: CostCenter
+        Value: Risk
+      - Key: Owner
+        Value: en341
+      - Key: Creator
+        Value: en341
+      - Key: Application
+        Value: MDH
+      - Key: Environment
+        Value: DEV
+      - Key: Confidentiality
+        Value: None
 
   # Security group to allow public access to port 443
   ApiLoadBalancerSecGroup:
@@ -865,6 +928,20 @@ Resources:
       Tags:
       - Key: Name
         Value: apiserver-lb-security-group
+      - Key: Product
+        Value: Risk
+      - Key: CostCenter
+        Value: Risk
+      - Key: Owner
+        Value: en341
+      - Key: Creator
+        Value: en341
+      - Key: Application
+        Value: MDH
+      - Key: Environment
+        Value: DEV
+      - Key: Confidentiality
+        Value: None
 
 # Outputs are what AWS will show you after stack creation
 # Generally they let you easily access some information about the stack
