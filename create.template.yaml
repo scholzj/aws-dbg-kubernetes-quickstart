@@ -75,7 +75,7 @@ Metadata:
       ClusterSubnetId:
         default: Subnet
       LambdaIAMRole:
-        default: Arn of the IAM role which should be used by toen lambda
+        default: Arn of the IAM role which should be used by token lambda
       MasterInstanceProfile:
         default: Arn of the instance profile related to the Master IAM role
       NodeInstanceProfile:
@@ -394,7 +394,7 @@ Resources:
       # The IAM role allows us to create further AWS resources (like an EBS drive) from the cluster
       # This is needed for the Kubernetes-AWS cloud-provider integration
       #IamInstanceProfile: !Ref MasterInstanceProfile
-      IamInstanceProfile: MasterInstanceProfile
+      IamInstanceProfile: !Ref MasterInstanceProfile
       # Type of instance; the default is t2.medium
       InstanceType: !Ref InstanceType
       # Adds our SSH key to the instance
@@ -516,7 +516,7 @@ Resources:
       Handler: "index.handler"
       Runtime: "python2.7"
       Timeout: "5"
-      Role: LambdaIAMRole
+      Role: !Ref LambdaIAMRole
 
   # A Custom resource that uses the lambda function to generate our cluster token
   KubeadmToken:
@@ -649,7 +649,7 @@ Resources:
       # The IAM role allows us to create further AWS resources (like an EBS drive) from the cluster
       # This is needed for the Kubernetes-AWS cloud-provider integration
       #IamInstanceProfile: !Ref NodeInstanceProfile
-      IamInstanceProfile: NodeInstanceProfile
+      IamInstanceProfile: !Ref NodeInstanceProfile
       # http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-instance.html#cfn-ec2-instance-imageid
       ImageId:
         Fn::FindInMap:
