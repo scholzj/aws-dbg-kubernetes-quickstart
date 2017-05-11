@@ -877,7 +877,8 @@ Resources:
   ApiLoadBalancer:
     Type: AWS::ElasticLoadBalancing::LoadBalancer
     Properties:
-      Scheme: internet-facing
+    #   Scheme: internet-facing
+      Scheme: internal
       Listeners:
       - Protocol: TCP
         InstancePort: 6443
