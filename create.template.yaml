@@ -417,7 +417,7 @@ Resources:
       - Key: Product
         Value: Risk
       - Key: CostCenter
-        Value: Risk
+        Value: 665050
       - Key: Owner
         Value: en341
       - Key: Creator
@@ -586,7 +586,7 @@ Resources:
         Value: Risk
         PropagateAtLaunch: 'true'
       - Key: CostCenter
-        Value: Risk
+        Value: 665050
         PropagateAtLaunch: 'true'
       - Key: Owner
         Value: en341
@@ -712,7 +712,7 @@ Resources:
       - Key: Product
         Value: Risk
       - Key: CostCenter
-        Value: Risk
+        Value: 665050
       - Key: Owner
         Value: en341
       - Key: Creator
@@ -905,7 +905,7 @@ Resources:
       - Key: Product
         Value: Risk
       - Key: CostCenter
-        Value: Risk
+        Value: 665050
       - Key: Owner
         Value: en341
       - Key: Creator
@@ -934,7 +934,7 @@ Resources:
       - Key: Product
         Value: Risk
       - Key: CostCenter
-        Value: Risk
+        Value: 665050
       - Key: Owner
         Value: en341
       - Key: Creator
