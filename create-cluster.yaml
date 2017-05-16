@@ -1,0 +1,10 @@
+---
+###########################
+# Install Kubernetes cluster using Cloud Formation template
+# Based on the AWS QuickState from Heptio
+###########################
+
+- hosts: localhost
+  connection: local
+  roles:
+    - create-cluster
