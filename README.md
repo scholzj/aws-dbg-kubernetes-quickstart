@@ -8,15 +8,6 @@ This repository contains the Ansible scripts for deploying a Kubernetes cluster 
 * Install kubectl (see below)
 * Install AWS CLI
 
-### Kubectl installation
-
-*TODO!!!*
-
-Playbook `install-kubectl.yaml` can be used for installing the latest version of kubectl on Linux or MacOS. To install it run
-```
-ansible-playbook install-kubectl.yaml
-```
-
 ## Configuration
 
 The main configuration of the cluster is in the variables in `group_vars/all/vars.yaml`. Following table shows the different options.
@@ -68,7 +59,7 @@ This will delete the CloudFormation stack, the resources it created, the SSH key
 
 ## Install add-ons
 
-*TODO!!!*
+**TODO!!!**
 
 Currently, the supported add-ons are:
 * Kubernetes dashboard
@@ -82,7 +73,7 @@ ansible-playbook addons.yaml
 
 ## Install ingress
 
-*TODO!!!*
+**TODO!!!**
 
 Ingress can be used route inbound traffic from the outside of the Kubernetes cluster. It can be used for SSL termination, virtual hosts, load balancing etc. For more details about ingress, go to [Kubernetes website](https://kubernetes.io/docs/concepts/services-networking/ingress/).
 
@@ -93,7 +84,7 @@ ansible-playbook ingress.yaml
 
 ## Install and deleting the tagging lambda function
 
-*TODO!!!*
+**TODO!!!**
 
 The AWS Lambda function for tagging of resources (the related IAM and CloudWatch objects) can be also installed and uninstalled separately. To install it run:
 ```
