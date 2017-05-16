@@ -33,7 +33,7 @@
 # Create policy, cloud formation stack and role
 
 - name: Find if IAM policy exists
-  shell: "aws iam list-policies --scope Local --output json | jq '.Policies[] | select(.PolicyName==\"{{ prefix }}{{ policy_name }}\").Arn'"
+  shell: "aws iam list-policies --scope Local --output json | jq '.Policies[] | select(.PolicyName==\"{{ iam_prefix }}{{ policy_name }}\").Arn'"
   register: old_policy_arn
 
 - name: Get IAM policy details
@@ -54,10 +54,10 @@
   when: old_policy_arn.stdout.find('arn:aws:iam::') != -1 and old_policy.Policy.AttachmentCount > 0
 
 - name: Create IAM policy
-  shell: "aws iam create-policy --policy-name {{ prefix }}{{ policy_name }} --policy-document file://{{ policy_file }}"
+  shell: "aws iam create-policy --policy-name {{ iam_prefix }}{{ policy_name }} --policy-document file://{{ policy_file }}"
 
 - name: Create Cloud Formation
-  shell: "aws cloudformation create-stack --stack-name {{ cf_stack_name }} --template-url {{ template_url }} --parameters ParameterKey=PolicyName,ParameterValue={{ prefix }}{{ policy_name }} ParameterKey=RoleName,ParameterValue={{ iam_role_name }} ParameterKey=TrustEntity,ParameterValue={{ trust_entity }} --region {{ aws_region }} --output json"
+  shell: "aws cloudformation create-stack --stack-name {{ cf_stack_name }} --template-url {{ template_url }} --parameters ParameterKey=PolicyName,ParameterValue={{ iam_prefix }}{{ policy_name }} ParameterKey=RoleName,ParameterValue={{ iam_role_name }} ParameterKey=TrustEntity,ParameterValue={{ trust_entity }} --region {{ aws_region }} --output json"
 
 - name: Check if Cloud Formation stack is complete
   shell: "aws cloudformation describe-stacks --stack-name {{ cf_stack_name }} --region {{ aws_region }} --output json | jq '.Stacks[0].StackStatus'"

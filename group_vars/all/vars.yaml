@@ -49,5 +49,5 @@ kubernetes_node_count: 3
 # DBG Role template URL
 template_url: https://s3.eu-central-1.amazonaws.com/init-prod-dev-s3bucket-15205kjmp3ix0/RoleGeneration/DBG-CORE-ROLE-Trigger.template
 
-# DBG prefix
-prefix: DBG-DEV-
+# DBG IAM prefix
+iam_prefix: DBG-DEV-
