@@ -34,3 +34,12 @@
 
 - set_fact:
    cf_template_url: "https://s3.{{ aws_region }}.amazonaws.com/{{ cluster_name }}/create.template.yaml"
+
+# Upload SSH public key
+
+- name: Upload the SSH public key
+  ec2_key:
+    name: "{{ cluster_name }}"
+    key_material: "{{ item }}"
+    region: "{{ aws_region }}"
+  with_file: "{{ ssh_key }}"
