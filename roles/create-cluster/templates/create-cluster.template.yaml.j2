@@ -721,6 +721,7 @@ Resources:
     Type: AWS::ElasticLoadBalancing::LoadBalancer
     Properties:
       Scheme: internal
+      LoadBalancerName: {{ cluster_name }}-api-loadbalancer
       Listeners:
       - Protocol: TCP
         InstancePort: 6443
