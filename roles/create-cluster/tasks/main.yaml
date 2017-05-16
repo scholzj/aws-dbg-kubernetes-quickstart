@@ -33,7 +33,7 @@
     region: "{{ aws_region }}"
 
 - set_fact:
-   cf_template_url: "https://s3.{{ aws_region }}.amazonaws.com/{{ cluster_name }}/create.template.yaml"
+   cf_template_url: "https://s3.{{ aws_region }}.amazonaws.com/{{ cluster_name }}/create-cluster.template.yaml"
 
 # Upload SSH public key
 
@@ -56,7 +56,7 @@
 # Create and execute Cloudformation stack
 
 - name: Create Cloud Formation
-  shell: "aws cloudformation create-stack --stack-name {{ cf_stack_name }} --template-url {{ cf_template_url }} --parameters ParameterKey=VPCID,ParameterValue={{ vpc_id }} ParameterKey=AvailabilityZone,ParameterValue={{ aws_zone }} ParameterKey=ClusterSubnetId,ParameterValue={{ subnet_id }} ParameterKey=LoadBalancerSubnetId,ParameterValue={{ subnet_id }} ParameterKey=LambdaIAMRole,ParameterValue={{ lambda_role_json.Role.Arn}} ParameterKey=MasterInstanceProfile,ParameterValue={{ iam_prefix }}{{ cluster_name }}-master ParameterKey=NodeInstanceProfile,ParameterValue={{ iam_prefix }}{{ cluster_name }}-node ParameterKey=SSHLocation,ParameterValue={{ ssh_cidr }} ParameterKey=ApiLbLocation,ParameterValue={{ api_cidr }} ParameterKey=KeyName,ParameterValue={{ cluster_name }} ParameterKey=InstanceType,ParameterValue={{ ec2_instance_type }} ParameterKey=DiskSizeGb,ParameterValue={{ ec2_disk_size }} ParameterKey=K8sNodeCapacity,ParameterValue={{ kubernetes_node_count }} ParameterKey=NetworkingProvider,ParameterValue={{ kubernetes_network }} ParameterKey=ClusterAssociation,ParameterValue={{ cluster_name }} --region {{ aws_region }} --output json"
+  shell: "aws cloudformation create-stack --stack-name {{ cluster_name }} --template-url {{ cf_template_url }} --parameters ParameterKey=VPCID,ParameterValue={{ vpc_id }} ParameterKey=AvailabilityZone,ParameterValue={{ aws_zone }} ParameterKey=ClusterSubnetId,ParameterValue={{ subnet_id }} ParameterKey=LoadBalancerSubnetId,ParameterValue={{ subnet_id }} ParameterKey=LambdaIAMRole,ParameterValue={{ lambda_role_json.Role.Arn}} ParameterKey=MasterInstanceProfile,ParameterValue={{ iam_prefix }}{{ cluster_name }}-master ParameterKey=NodeInstanceProfile,ParameterValue={{ iam_prefix }}{{ cluster_name }}-node ParameterKey=SSHLocation,ParameterValue={{ ssh_cidr }} ParameterKey=ApiLbLocation,ParameterValue={{ api_cidr }} ParameterKey=KeyName,ParameterValue={{ cluster_name }} ParameterKey=InstanceType,ParameterValue={{ ec2_instance_type }} ParameterKey=DiskSizeGb,ParameterValue={{ ec2_disk_size }} ParameterKey=K8sNodeCapacity,ParameterValue={{ kubernetes_node_count }} ParameterKey=NetworkingProvider,ParameterValue={{ kubernetes_network }} ParameterKey=ClusterAssociation,ParameterValue={{ cluster_name }} --region {{ aws_region }} --output json"
 
 - name: Check if Cloud Formation stack is complete
   shell: "aws cloudformation describe-stacks --stack-name {{ cluster_name }} --region {{ aws_region }} --output json | jq '.Stacks[0].StackStatus'"
