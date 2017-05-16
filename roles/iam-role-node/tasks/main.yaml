@@ -13,13 +13,13 @@
    trust_entity: "ec2.amazonaws.com"
 
 - set_fact:
-   policy_name: "{{ naming_prefix }}-node"
+   policy_name: "{{ cluster_name }}-node"
 
 - set_fact:
-   iam_role_name: "{{ naming_prefix }}-node"
+   iam_role_name: "{{ cluster_name }}-node"
 
 - set_fact:
-   cf_stack_name: "{{ naming_prefix }}-node"
+   cf_stack_name: "{{ cluster_name }}-node"
 
 # Render templates
 

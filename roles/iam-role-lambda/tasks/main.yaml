@@ -13,13 +13,13 @@
    trust_entity: "lambda.amazonaws.com"
 
 - set_fact:
-   policy_name: "{{ naming_prefix }}-lambda"
+   policy_name: "{{ cluster_name }}-lambda"
 
 - set_fact:
-   iam_role_name: "{{ naming_prefix }}-lambda"
+   iam_role_name: "{{ cluster_name }}-lambda"
 
 - set_fact:
-   cf_stack_name: "{{ naming_prefix }}-lambda"
+   cf_stack_name: "{{ cluster_name }}-lambda"
 
 # Render templates
 

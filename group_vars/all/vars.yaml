@@ -1,10 +1,49 @@
 ---
 
-# Prefix for IAM resources (might be further modified by the DBG wide prefix)
-naming_prefix: en341-k8s-qs
+# Name of the Kubernetes cluster
+# Will be used to name also other resources (IAM roles, instances, S3 buckets, etc.)
+cluster_name: en341-k8s-qs
 
-# AWS region
+#####
+# Mandatory AWS tags
+#####
+tag_creator: en341
+tag_costcenter: 665050
+tag_product: Risk
+tag_environment: DEV
+
+#####
+# Remote access and security
+#####
+
+# SSH key to access the cluster
+ssh_key: ~/.ssh/id_rsa.pub
+
+# CIDR from which is cluster access allowed
+ssh_cidr: 0.0.0.0/0
+
+# CIDR from which is Kubernetes API access allowed
+api_cidr: 0.0.0.0/0
+
+#####
+# AWS setup details
+#####
 aws_region: eu-central-1
+aws_zone: eu-central-1a
+vpc_id:
+subnet_id:
+
+#####
+# Kubernetes setup details
+#####
+ec2_instance_type: t2.medium
+ec2_disk_size: 40
+kubernetes_network: calico
+kubernetes_node_count: 2
+
+#####
+# IAM Role configuration
+#####
 
 # DBG Role template URL
 template_url: https://s3.eu-central-1.amazonaws.com/init-prod-dev-s3bucket-15205kjmp3ix0/RoleGeneration/DBG-CORE-ROLE-Trigger.template
