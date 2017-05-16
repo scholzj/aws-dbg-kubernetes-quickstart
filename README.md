@@ -39,7 +39,7 @@ ansible-playbook create_roles.yaml
 
 Because due to some useless security restrictions, we cannot delete the IAM roles and that makes the life complicated, this is a separate playbook instead of being part of the main playbook as would be more appropriate.
 
-## Install Kubernetes cluster
+## Create Kubernetes cluster
 
 The Kubernetes cluster can be created by running
 ```
