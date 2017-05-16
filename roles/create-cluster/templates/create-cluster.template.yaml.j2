@@ -416,7 +416,7 @@ Resources:
         Value: {{ cluster_name }}-k8s-master
 {% for tagName, tagValue in tags.iteritems() %}
       - Key: {{ tagName }}
-        Name: {{ tagValue }}
+        Value: {{ tagValue }}
 {% endfor %}
       - Key: KubernetesCluster
         Value:
@@ -489,7 +489,7 @@ Resources:
         Value: {{ cluster_name }}-GenKubeadmToken
 {% for tagName, tagValue in tags.iteritems() %}
       - Key: {{ tagName }}
-        Name: {{ tagValue }}
+        Value: {{ tagValue }}
 {% endfor %}
       - Key: KubernetesCluster
         Value:
@@ -565,7 +565,7 @@ Resources:
         PropagateAtLaunch: 'true'
 {% for tagName, tagValue in tags.iteritems() %}
       - Key: {{ tagName }}
-        Name: {{ tagValue }}
+        Value: {{ tagValue }}
         PropagateAtLaunch: 'true'
 {% endfor %}
       - Key: KubernetesCluster
@@ -676,7 +676,7 @@ Resources:
         Value: {{ cluster_name }}-k8s-cluster-security-group
 {% for tagName, tagValue in tags.iteritems() %}
       - Key: {{ tagName }}
-        Name: {{ tagValue }}
+        Value: {{ tagValue }}
 {% endfor %}
 
   # Permissions we add to the main security group:
@@ -748,7 +748,7 @@ Resources:
         Value: {{ cluster_name }}-api-loadbalancer
 {% for tagName, tagValue in tags.iteritems() %}
       - Key: {{ tagName }}
-        Name: {{ tagValue }}
+        Value: {{ tagValue }}
 {% endfor %}
 
   # Security group to allow public access to port 443
@@ -767,7 +767,7 @@ Resources:
         Value: {{ cluster_name }}-apiserver-lb-security-group
 {% for tagName, tagValue in tags.iteritems() %}
       - Key: {{ tagName }}
-        Name: {{ tagValue }}
+        Value: {{ tagValue }}
 {% endfor %}
 
 # Outputs are what AWS will show you after stack creation
