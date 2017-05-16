@@ -7,10 +7,11 @@ cluster_name: en341-k8s-qs
 #####
 # Mandatory AWS tags
 #####
-tag_creator: en341
-tag_costcenter: 665050
-tag_product: Risk
-tag_environment: DEV
+tags:
+  Creator: en341
+  CostCenter: 665050
+  Product: Risk
+  Environment: DEV
 
 #####
 # Remote access and security
@@ -30,8 +31,8 @@ api_cidr: 0.0.0.0/0
 #####
 aws_region: eu-central-1
 aws_zone: eu-central-1a
-vpc_id:
-subnet_id:
+vpc_id: vpc-969d43fe
+subnet_id: subnet-ca9dcca2
 
 #####
 # Kubernetes setup details
@@ -39,7 +40,7 @@ subnet_id:
 ec2_instance_type: t2.medium
 ec2_disk_size: 40
 kubernetes_network: calico
-kubernetes_node_count: 2
+kubernetes_node_count: 3
 
 #####
 # IAM Role configuration

@@ -413,21 +413,11 @@ Resources:
       # Tags it with KubernetesCluster=<stackname> or chosen value (needed for cloud-provider's IAM roles)
       Tags:
       - Key: Name
-        Value: k8s-master
-      - Key: Product
-        Value: Risk
-      - Key: CostCenter
-        Value: 665050
-      - Key: Owner
-        Value: en341
-      - Key: Creator
-        Value: en341
-      - Key: Application
-        Value: MDH
-      - Key: Environment
-        Value: DEV
-      - Key: Confidentiality
-        Value: None
+        Value: {{ cluster_name }}-k8s-master
+{% for tagName, tagValue in tags.iteritems() %}
+      - Key: {{ tagName }}
+        Name: {{ tagValue }}
+{% endfor %}
       - Key: KubernetesCluster
         Value:
           Fn::If:
@@ -469,34 +459,11 @@ Resources:
       ResourceSignal:
         Timeout: PT10M
 
-  # IAM role for Lambda function for generating kubeadm token
-  # LambdaExecutionRole:
-  #   Type: "AWS::IAM::Role"
-  #   Properties:
-  #     AssumeRolePolicyDocument:
-  #       Version: "2012-10-17"
-  #       Statement:
-  #       - Effect: "Allow"
-  #         Principal:
-  #           Service: ["lambda.amazonaws.com"]
-  #         Action: "sts:AssumeRole"
-  #     Path: "/"
-  #     Policies:
-  #     - PolicyName: "lambda_policy"
-  #       PolicyDocument:
-  #         Version: "2012-10-17"
-  #         Statement:
-  #         - Effect: "Allow"
-  #           Action:
-  #           - "logs:CreateLogGroup"
-  #           - "logs:CreateLogStream"
-  #           - "logs:PutLogEvents"
-  #           Resource: "arn:aws:logs:*:*:*"
-
   # Lambda Function for generating the kubeadm token
   GenKubeadmToken:
     Type: "AWS::Lambda::Function"
     Properties:
+      FunctionName: {{ cluster_name }}-GenKubeadmToken
       Code:
         ZipFile: |
           import random
@@ -517,6 +484,19 @@ Resources:
       Runtime: "python2.7"
       Timeout: "5"
       Role: !Ref LambdaIAMRole
+      Tags:
+      - Key: Name
+        Value: {{ cluster_name }}-GenKubeadmToken
+{% for tagName, tagValue in tags.iteritems() %}
+      - Key: {{ tagName }}
+        Name: {{ tagValue }}
+{% endfor %}
+      - Key: KubernetesCluster
+        Value:
+          Fn::If:
+          - AssociationProvidedCondition
+          - !Ref ClusterAssociation
+          - !Ref AWS::StackName
 
   # A Custom resource that uses the lambda function to generate our cluster token
   KubeadmToken:
@@ -532,6 +512,7 @@ Resources:
   RecoveryTestAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
+      AlarmName: {{ cluster_name }}-RecoveryTestAlarm
       AlarmDescription: Trigger a recovery when instance status check fails for 5
         consecutive minutes.
       Namespace: AWS/EC2
@@ -580,29 +561,13 @@ Resources:
       # Tags each node with KubernetesCluster=<stackname> or chosen value (needed for cloud-provider's IAM roles)
       Tags:
       - Key: Name
-        Value: k8s-node
+        Value: {{ cluster_name }}-k8s-node
         PropagateAtLaunch: 'true'
-      - Key: Product
-        Value: Risk
+{% for tagName, tagValue in tags.iteritems() %}
+      - Key: {{ tagName }}
+        Name: {{ tagValue }}
         PropagateAtLaunch: 'true'
-      - Key: CostCenter
-        Value: 665050
-        PropagateAtLaunch: 'true'
-      - Key: Owner
-        Value: en341
-        PropagateAtLaunch: 'true'
-      - Key: Creator
-        Value: en341
-        PropagateAtLaunch: 'true'
-      - Key: Application
-        Value: MDH
-        PropagateAtLaunch: 'true'
-      - Key: Environment
-        Value: DEV
-        PropagateAtLaunch: 'true'
-      - Key: Confidentiality
-        Value: None
-        PropagateAtLaunch: 'true'
+{% endfor %}
       - Key: KubernetesCluster
         Value:
           Fn::If:
@@ -708,21 +673,11 @@ Resources:
           - !Ref ClusterAssociation
           - !Ref AWS::StackName
       - Key: Name
-        Value: k8s-cluster-security-group
-      - Key: Product
-        Value: Risk
-      - Key: CostCenter
-        Value: 665050
-      - Key: Owner
-        Value: en341
-      - Key: Creator
-        Value: en341
-      - Key: Application
-        Value: MDH
-      - Key: Environment
-        Value: DEV
-      - Key: Confidentiality
-        Value: None
+        Value: {{ cluster_name }}-k8s-cluster-security-group
+{% for tagName, tagValue in tags.iteritems() %}
+      - Key: {{ tagName }}
+        Name: {{ tagValue }}
+{% endfor %}
 
   # Permissions we add to the main security group:
   # - Ensure cluster machines can talk to one another
@@ -760,124 +715,11 @@ Resources:
       ToPort: '6443'
       SourceSecurityGroupId: !Ref ApiLoadBalancerSecGroup
 
-  # IAM role for nodes http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html
-  # NodeRole:
-  #   Type: AWS::IAM::Role
-  #   Properties:
-  #     AssumeRolePolicyDocument:
-  #       Version: '2012-10-17'
-  #       Statement:
-  #       - Effect: Allow
-  #         Principal:
-  #           Service:
-  #           - ec2.amazonaws.com
-  #         Action:
-  #         - sts:AssumeRole
-  #     Path: "/"
-  #     # IAM policy for nodes that allows specific AWS resource listing and creation
-  #     # http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html
-  #     Policies:
-  #     - PolicyName: node
-  #       PolicyDocument:
-  #         Version: '2012-10-17'
-  #         Statement:
-  #         - Effect: Allow
-  #           Action:
-  #           - ec2:Describe*
-  #           - ecr:GetAuthorizationToken
-  #           - ecr:BatchCheckLayerAvailability
-  #           - ecr:GetDownloadUrlForLayer
-  #           - ecr:GetRepositoryPolicy
-  #           - ecr:DescribeRepositories
-  #           - ecr:ListImages
-  #           - ecr:BatchGetImage
-  #           Resource: "*"
-  #
-  #     - PolicyName: cwlogs
-  #       PolicyDocument:
-  #         Version: '2012-10-17'
-  #         Statement:
-  #         - Effect: Allow
-  #           Action:
-  #           - logs:CreateLogGroup
-  #           - logs:CreateLogStream
-  #           - logs:PutLogEvents
-  #           - logs:DescribeLogStreams
-  #           Resource: !Sub ["${LogGroupArn}:*", LogGroupArn: !GetAtt KubernetesLogGroup.Arn]
-
-  # Resource that creates the node IAM role
-  # NodeInstanceProfile:
-  #   Type: AWS::IAM::InstanceProfile
-  #   Properties:
-  #     Path: "/"
-  #     Roles:
-  #     - NodeIAMRole
-  #     #- !Ref NodeRole
-
-  # IAM role for the master node http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html
-  # MasterRole:
-  #   Type: AWS::IAM::Role
-  #   Properties:
-  #     AssumeRolePolicyDocument:
-  #       Version: '2012-10-17'
-  #       Statement:
-  #       - Effect: Allow
-  #         Principal:
-  #           Service:
-  #           - ec2.amazonaws.com
-  #         Action:
-  #         - sts:AssumeRole
-  #     Path: "/"
-  #     # IAM policy for the master node that allows specific AWS resource listing and creation
-  #     # More permissive than the node role (it allows load balancer creation)
-  #     # http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html
-  #     Policies:
-  #     - PolicyName: master
-  #       PolicyDocument:
-  #         Version: '2012-10-17'
-  #         Statement:
-  #         - Effect: Allow
-  #           Action:
-  #           - ec2:*
-  #           - elasticloadbalancing:*
-  #           - ecr:GetAuthorizationToken
-  #           - ecr:BatchCheckLayerAvailability
-  #           - ecr:GetDownloadUrlForLayer
-  #           - ecr:GetRepositoryPolicy
-  #           - ecr:DescribeRepositories
-  #           - ecr:ListImages
-  #           - ecr:BatchGetImage
-  #           - autoscaling:DescribeAutoScalingGroups
-  #           - autoscaling:UpdateAutoScalingGroup
-  #           Resource: "*"
-  #
-  #     - PolicyName: cwlogs
-  #       PolicyDocument:
-  #         Version: '2012-10-17'
-  #         Statement:
-  #         - Effect: Allow
-  #           Action:
-  #           - logs:CreateLogGroup
-  #           - logs:CreateLogStream
-  #           - logs:PutLogEvents
-  #           - logs:DescribeLogStreams
-  #           Resource: !Sub ["${LogGroupArn}:*", LogGroupArn: !GetAtt KubernetesLogGroup.Arn]
-
-  # Resource that creates the master node IAM role
-  # MasterInstanceProfile:
-  #   Type: AWS::IAM::InstanceProfile
-  #   Properties:
-  #     Path: "/"
-  #     Roles:
-  #     - MasterIAMRole
-  #     #- !Ref MasterRole
-
   # Create a placeholder load balancer for the API server. Backend instances will be added by the master itself on the
   # first boot in the startup script above.
   ApiLoadBalancer:
     Type: AWS::ElasticLoadBalancing::LoadBalancer
     Properties:
-    #   Scheme: internet-facing
       Scheme: internal
       Listeners:
       - Protocol: TCP
@@ -902,20 +744,12 @@ Resources:
           - !Ref AWS::StackName
       - Key: 'kubernetes.io/service-name'
         Value: 'kube-system/apiserver-public'
-      - Key: Product
-        Value: Risk
-      - Key: CostCenter
-        Value: 665050
-      - Key: Owner
-        Value: en341
-      - Key: Creator
-        Value: en341
-      - Key: Application
-        Value: MDH
-      - Key: Environment
-        Value: DEV
-      - Key: Confidentiality
-        Value: None
+      - Key: Name
+        Value: {{ cluster_name }}-api-loadbalancer
+{% for tagName, tagValue in tags.iteritems() %}
+      - Key: {{ tagName }}
+        Name: {{ tagValue }}
+{% endfor %}
 
   # Security group to allow public access to port 443
   ApiLoadBalancerSecGroup:
@@ -930,21 +764,11 @@ Resources:
         IpProtocol: tcp
       Tags:
       - Key: Name
-        Value: apiserver-lb-security-group
-      - Key: Product
-        Value: Risk
-      - Key: CostCenter
-        Value: 665050
-      - Key: Owner
-        Value: en341
-      - Key: Creator
-        Value: en341
-      - Key: Application
-        Value: MDH
-      - Key: Environment
-        Value: DEV
-      - Key: Confidentiality
-        Value: None
+        Value: {{ cluster_name }}-apiserver-lb-security-group
+{% for tagName, tagValue in tags.iteritems() %}
+      - Key: {{ tagName }}
+        Name: {{ tagValue }}
+{% endfor %}
 
 # Outputs are what AWS will show you after stack creation
 # Generally they let you easily access some information about the stack
