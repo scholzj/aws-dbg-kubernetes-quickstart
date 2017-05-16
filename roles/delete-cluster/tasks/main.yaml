@@ -36,4 +36,4 @@
     key_material: "{{ item }}"
     region: "{{ aws_region }}"
     state: absent
-  with_file: "{{ ssh_key }}"
+  with_file: "{{ ssh_public_key }}"

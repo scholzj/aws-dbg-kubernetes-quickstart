@@ -41,7 +41,7 @@
     name: "{{ cluster_name }}"
     key_material: "{{ item }}"
     region: "{{ aws_region }}"
-  with_file: "{{ ssh_key }}"
+  with_file: "{{ ssh_public_key }}"
 
 # Get Lambda role Arn
 
