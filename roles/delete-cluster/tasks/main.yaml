@@ -1,0 +1,39 @@
+---
+
+####################
+# Delete Kubernetes cluster
+####################
+
+# Delete the cloud formation and its resources
+
+- name: Delete Cloud Formation stack
+  shell: "aws cloudformation delete-stack --stack-name {{ cluster_name }} --region {{ aws_region }} --output json"
+
+- name: Check if Cloud Formation stack is complete
+  shell: "aws cloudformation describe-stacks --stack-name {{ cluster_name }} --region {{ aws_region }} --output json | jq '.Stacks[0].StackStatus'"
+  register: cmd_result
+  until: (cmd_result.stderr.find('Stack with id') != -1 and cmd_result.stderr.find('does not exist') != -1) or cmd_result.stdout.find('DELETE_COMPLETE') != -1 or cmd_result.stdout.find('DELETE_FAILED') != -1
+  #ignore_errors: True
+  retries: 20
+  delay: 30
+
+# Delete S3 bucket
+
+- name: Create S3 bucket
+  s3_bucket:
+    name: "{{ cluster_name }}"
+    state: absent
+    region: "{{ aws_region }}"
+    versioning: no
+    force: yes
+    tags: "{{ tags }}"
+
+# Delete SSH public key
+
+- name: Upload the SSH public key
+  ec2_key:
+    name: "{{ cluster_name }}"
+    key_material: "{{ item }}"
+    region: "{{ aws_region }}"
+    state: absent
+  with_file: "{{ ssh_key }}"
