@@ -1,0 +1,36 @@
+---
+
+####################
+# Create Kubernetes cluster
+####################
+
+# Render templates
+
+- name: Generate CloudFormation template
+  template:
+    src: create-cluster.template.yaml.j2
+    dest: "/tmp/create-cluster.template.yaml"
+    mode: 0744
+  become: false
+
+# Create S3 bucket and upload the template
+
+# Create a simple s3 bucket
+- name: Create S3 bucket
+  s3_bucket:
+    name: "{{ cluster_name }}"
+    state: present
+    region: "{{ aws_region }}"
+    versioning: no
+    tags: "{{ tags }}"
+
+- name: Upload the Cloudformation template to S3
+  s3:
+    bucket: "{{ cluster_name }}"
+    src: /tmp/create-cluster.template.yaml
+    object: create-cluster.template.yaml
+    mode: put
+    region: "{{ aws_region }}"
+
+- set_fact:
+   cf_template_url: "https://s3.{{ aws_region }}.amazonaws.com/{{ cluster_name }}/create.template.yaml"
