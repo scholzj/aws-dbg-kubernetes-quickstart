@@ -10,3 +10,4 @@
     - iam-role-master
     - iam-role-node
     - iam-role-lambda
+    - iam-role-tagging-lambda
