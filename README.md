@@ -17,6 +17,7 @@ The main configuration of the cluster is in the variables in `group_vars/all/var
 | `cluster_name` | Name of the cluster which should be created. The name should be DNS compatible. It will be used to name different resources etc. | `my-k8s-cluster` |
 | `tags` | A dictionary with different tags which should be used for resources. The tags have to full fill the DBG requirements. | |
 | `ssh_public_key` | Path to the public part of the SSH key, which should be used for the SSH access to the Kubernetes hosts | `~/.ssh/id_rsa.pub` |
+| `ssh_private_key` | Path to the private part of the SSH key, which should be used for the SSH access to the Kubernetes hosts | `~/.ssh/id_rsa` |
 | `ssh_cidr` | A CIDR from which SSH access is allowed | `172.35.0.0/16` |
 | `api_cidr` | A CIDR from which Kubernetes API access is allowed | `172.35.0.0/16` |
 | `aws_region` | AWS region where the cluster should be installed. | `eu-west-1` |

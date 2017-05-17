@@ -27,6 +27,7 @@ tags:
 
 # SSH key to access the cluster
 ssh_public_key: ~/.ssh/id_rsa.pub
+ssh_private_key: ~/.ssh/id_rsa
 
 # CIDR from which is cluster access allowed
 ssh_cidr: 0.0.0.0/0
