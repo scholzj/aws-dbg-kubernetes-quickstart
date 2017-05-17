@@ -338,6 +338,17 @@ Resources:
       LogGroupName: !Ref AWS::StackName
       RetentionInDays: 14
 
+  KubernetesApiDNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: {{ dns_zone }}
+      Comment: DNS name Kubernetes API for {{ cluster_name }}.
+      Name: api.{{ cluster_name }}.{{ dns_zone }}
+      Type: A
+      AliasTraget:
+      ResourceRecords:
+      - !GetAtt Ec2Instance.PublicIp
+
   # This is an EC2 instance that will serve as our master node
   K8sMasterInstance:
     Type: AWS::EC2::Instance
@@ -370,7 +381,7 @@ Resources:
               source: !Sub "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}/scripts/setup-k8s-master.sh.in"
               mode: '000755'
               context:
-                LoadBalancerDns: !GetAtt ApiLoadBalancer.DNSName
+                LoadBalancerDns: api.{{ cluster_name }}.{{ dns_zone }}
                 LoadBalancerName: !Ref ApiLoadBalancer
                 ClusterToken: !GetAtt KubeadmToken.Token
                 NetworkingProviderUrl: !Sub "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}/scripts/${NetworkingProvider}.yaml"
@@ -751,6 +762,17 @@ Resources:
       - Key: {{ tagName }}
         Value: {{ tagValue }}
 {% endfor %}
+
+  KubernetesApiDNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: {{ dns_zone }}.
+      Comment: DNS name Kubernetes API for {{ cluster_name }}.
+      Name: api.{{ cluster_name }}.{{ dns_zone }}
+      Type: A
+      AliasTarget:
+        HostedZoneId: !GetAtt ApiLoadBalancer.CanonicalHostedZoneNameID
+        DNSName: !GetAtt ApiLoadBalancer.DNSName
 
   # Security group to allow public access to port 443
   ApiLoadBalancerSecGroup:
