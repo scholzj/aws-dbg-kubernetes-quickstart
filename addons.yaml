@@ -1,0 +1,11 @@
+---
+###########################
+# Setup Kubernetes Add-Ons
+###########################
+
+- hosts: localhost
+  connection: local
+  roles:
+    - addons-dashboard
+    #- addons-heapster
+    #- addons-storage
