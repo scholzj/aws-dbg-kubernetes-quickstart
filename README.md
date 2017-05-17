@@ -25,6 +25,8 @@ The main configuration of the cluster is in the variables in `group_vars/all/var
 | `aws_zones` | List of availability zones in which the cluster should be installed. | `eu-west-1a` |
 | `vpc_id` | ID of the existing Amazon AWS VPC where the cluster should be placed. | `vpc-9694d3fe` |
 | `subnet_id` | ID of the existing Amazon AWS subnet where the cluster should be placed. | `subnet-ca9cdca2` |
+| `dns_zone` | Hosted DNS zone which has to exist in Route53 | `dev.dbgcloud.io` |
+| `elb_hosted_zone` | The hosted zone in which the aliased ELB load balancers are hosted (should be dependent on the AWS region) | `Z32O12XQLNTSW2` |
 | `ec2_instance_type` | EC2 size of the nodes used as workers. | `t2.medium` |
 | `ec2_disk_size` | Disk size for the EC2 instances (in GB). | `40` |
 | `kubernetes_node_count` | Number of EC2 worker hosts. | `2` |
@@ -73,14 +75,14 @@ ansible-playbook addons.yaml
 
 ## Install ingress
 
-**TODO!!!**
-
 Ingress can be used route inbound traffic from the outside of the Kubernetes cluster. It can be used for SSL termination, virtual hosts, load balancing etc. For more details about ingress, go to [Kubernetes website](https://kubernetes.io/docs/concepts/services-networking/ingress/).
 
 To install ingress controller based on Nginx, run
 ```
 ansible-playbook ingress.yaml
 ```
+
+After installation, the Ingress will be available under the hostname `ingress.<ClusterName>.<DNSZone>`.
 
 ## Install and deleting the tagging lambda function
 

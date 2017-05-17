@@ -45,6 +45,16 @@ vpc_id: vpc-969d43fe
 subnet_id: subnet-ca9dcca2
 
 #####
+# DNS settings
+#####
+
+# Domain name for the application
+dns_zone: dev.dbgcloud.io
+
+# Hosted zone of loadbalancers created by Kubernetes cluster (should be region dependent)
+elb_hosted_zone: Z215JYRZR1TBD5
+
+#####
 # Kubernetes setup details
 #####
 ec2_instance_type: t2.medium

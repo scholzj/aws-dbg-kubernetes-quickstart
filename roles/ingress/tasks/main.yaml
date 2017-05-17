@@ -6,26 +6,51 @@
 
 # Render templates
 
-- name: Ingress template
-  template:
-    src: ingress.yaml.j2
-    dest: /tmp/ingress.yaml
-    mode: 0644
-  become: false
+# - name: Ingress template
+#   template:
+#     src: ingress.yaml.j2
+#     dest: /tmp/ingress.yaml
+#     mode: 0644
+#   become: false
+#
+# - name: Add default backend template
+#   template:
+#     src: default-backend.yaml.j2
+#     dest: /tmp/default-backend.yaml
+#     mode: 0644
+#   become: false
+#
+# # Create default backend
+#
+# - name: Create default backend
+#   command: "kubectl --kubeconfig {{ kubeconfig_file }} create -f /tmp/default-backend.yaml"
+#
+# # Create ingress controller and default backend
+#
+# - name: Create ingress
+#   command: "kubectl --kubeconfig {{ kubeconfig_file }} create -f /tmp/ingress.yaml"
 
-- name: Add default backend template
-  template:
-    src: default-backend.yaml.j2
-    dest: /tmp/default-backend.yaml
-    mode: 0644
-  become: false
+# Create DNS record for the ingress service
 
-# Create default backend
+- name: Verify that ingress service is ready
+  shell: "kubectl --kubeconfig {{ kubeconfig_file }} --namespace kube-system get service ingress-nginx -o json | jq '.status.loadBalancer.ingress[0].hostname'"
+  register: cmd_result
+  until: cmd_result.stdout.find('amazonaws.com') != -1
+  retries: 20
+  delay: 10
 
-- name: Create default backend
-  command: "kubectl --kubeconfig {{ kubeconfig_file }} create -f /tmp/default-backend.yaml"
+- name: Get the ingress loadbalancer details
+  shell: "kubectl --kubeconfig {{ kubeconfig_file }} --namespace kube-system get service ingress-nginx -o json | jq -r '.status.loadBalancer.ingress[0].hostname'"
+  register: loadbalancer_dns_name
 
-# Create ingress controller and default backend
-
-- name: Create ingress
-  command: "kubectl --kubeconfig {{ kubeconfig_file }} create -f /tmp/ingress.yaml"
+- route53:
+    command: create
+    zone: "{{ dns_zone }}"
+    private_zone: true
+    record: "ingress.{{ cluster_name }}.{{ dns_zone }}"
+    type: A
+    value: "{{ loadbalancer_dns_name.stdout }}"
+    alias: True
+    alias_hosted_zone_id: "{{ elb_hosted_zone }}"
+    alias_evaluate_target_health: False
+    overwrite: True
