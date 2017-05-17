@@ -1,0 +1,14 @@
+---
+
+####################
+# Configure kubectl
+####################
+
+# Download kubectl file
+
+- name: Get the master IP address
+  shell: "aws cloudformation describe-stacks --stack-name {{ cluster_name }} --region {{ aws_region }} --output json | jq '.Stacks[0].Outputs[] | select(.OutputKey==\"MasterPrivateIp\").OutputValue'"
+  register: master_ip
+
+- name: Download kubeconfig
+  shell: "scp -i {{ ssh_private_key }} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@{{ master_ip.stdout }}:./kubeconfig {{ kubeconfig_file }}"

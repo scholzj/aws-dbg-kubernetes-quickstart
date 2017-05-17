@@ -8,3 +8,4 @@
   connection: local
   roles:
     - create-cluster
+    - config-kubectl

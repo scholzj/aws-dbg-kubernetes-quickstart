@@ -3,6 +3,7 @@
 # Name of the Kubernetes cluster
 # Will be used to name also other resources (IAM roles, instances, S3 buckets, etc.)
 cluster_name: en341-k8s-qs
+kubeconfig_file: ~/.kube/config-en341-k8s-qs
 
 #####
 # Mandatory AWS tags
