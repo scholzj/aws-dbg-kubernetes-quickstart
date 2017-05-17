@@ -23,9 +23,10 @@ This repository contains the Ansible scripts for deploying a Kubernetes cluster 
 
 1. Change the configuration (cluster name, tags, etc.)
 2. Create the IAM roles
-2. Install tagging lambda function
-3. Install the addons
-4. Install ingress (optional)
+3. Create the cluster
+4. Install tagging lambda function
+5. Install the addons
+6. Install ingress (optional)
 
 ## Uninstallation
 
