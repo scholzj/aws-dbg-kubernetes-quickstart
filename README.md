@@ -86,8 +86,6 @@ After installation, the Ingress will be available under the hostname `ingress.<C
 
 ## Install and deleting the tagging lambda function
 
-**TODO!!!**
-
 The AWS Lambda function for tagging of resources (the related IAM and CloudWatch objects) can be also installed and uninstalled separately. To install it run:
 ```
 ansible-playbook install-lambda.yaml

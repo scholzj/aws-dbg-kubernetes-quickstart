@@ -1,0 +1,74 @@
+---
+
+####################
+# Install tagging lambda function
+####################
+
+#
+# Prepare the policy files and lambda script / zip package
+#
+
+- name: Generate Lambda script
+  template:
+    src: tagging_lambda.py.j2
+    dest: /tmp/tagging_lambda.py
+    mode: 0744
+  become: false
+
+- name: ZIP the lambda function
+  command: "zip -j /tmp/tagging_lambda /tmp/tagging_lambda.py"
+
+#
+# Collect resources
+#
+- set_fact:
+    lambda_name: "{{ cluster_name | replace('.', '_') }}-tagging-lambda"
+
+- name: Get IAM policy details
+  shell: "aws iam get-role --role-name {{ iam_prefix }}{{ cluster_name }}-tagging-lambda --output json"
+  register: lambda_role
+
+- set_fact:
+    lambda_role_json: "{{ lambda_role.stdout | from_json }}"
+
+- set_fact:
+    role_arn: "{{ lambda_role_json.Role.Arn }}"
+
+# Sometimes, the role is not yet propagated accross all regions. Hence the loop.
+- name: Create the lambda using AWS CLI
+  command: "aws lambda create-function --function-name {{ lambda_name }} --role {{ role_arn }} --handler tagging_lambda.lambda_handler --runtime python2.7 --timeout 60 --memory 128 --zip-file fileb:///tmp/tagging_lambda.zip --region {{ aws_region }} --output json"
+  register: create_lambda_result
+  until: create_lambda_result.stdout.find('FunctionArn') != -1
+  retries: 10
+  delay: 5
+
+- set_fact:
+    create_lambda: "{{ create_lambda_result.stdout | from_json }}"
+
+- set_fact:
+    lambda_arn: "{{ create_lambda['FunctionArn'] }}"
+
+- name: Create the scheduling rule using AWS CLI
+  command: "aws events put-rule --name {{ lambda_name }} --schedule-expression 'rate(5 minutes)' --region {{ aws_region }} --output json"
+  register: create_rule_result
+
+- set_fact:
+    create_rule: "{{ create_rule_result.stdout | from_json }}"
+
+- set_fact:
+    rule_arn: "{{ create_rule['RuleArn'] }}"
+
+- name: Give lambda permission to receive events using AWS CLI
+  command: "aws lambda add-permission --function-name {{ lambda_name }} --statement-id {{ lambda_name }} --action 'lambda:InvokeFunction' --principal events.amazonaws.com --source-arn {{ rule_arn }} --region {{ aws_region }} --output json"
+  register: add_permission_result
+
+- name: Generate Lambda target
+  template:
+    src: rule-targets.json.j2
+    dest: /tmp/rule-targets.json
+    mode: 0644
+  become: false
+
+- name: Put target to route events to lambda using AWS CLI
+  command: "aws events put-targets --rule {{ lambda_name }} --targets file:///tmp/rule-targets.json --region {{ aws_region }} --output json"
+  register: put_target_result
