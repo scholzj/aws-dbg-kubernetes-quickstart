@@ -2,11 +2,37 @@
 
 This repository contains the Ansible scripts for deploying a Kubernetes cluster into DBG ProductDev Amazon AWS account. This account has severe limitations in what the users can do and that is why regular tools such as Kops don't work. This repository is based on the [AWS QuickStart guide](https://aws.amazon.com/quickstart/architecture/heptio-kubernetes/) from Heptio. But the CloudFormation stack is adapted. It will probably not work in any other AWS accounts.
 
+* [Prerequisites](#prerequisites)
+* [Installation](#installation)
+* [Uninstallation](#uninstallation)
+* [Configuration](#configuration)
+* [IAM roles](#iam-roles)
+* [Create cluster](#create-kubernetes-cluster)
+* [Delete cluster](#delete-kubernetes-cluster)
+* [Add-ons](#add-ons)
+* [Ingress](#ingress)
+* [Tagging Lambda](#tagging-lambda)
+
 ## Prerequisites
 
 * Install Ansible
 * Install kubectl (see below)
 * Install AWS CLI
+
+## Installation
+
+1. Change the configuration (cluster name, tags, etc.)
+2. Create the IAM roles
+2. Install tagging lambda function
+3. Install the addons
+4. Install ingress (optional)
+
+## Uninstallation
+
+1. Delete all namespaces from the cluster (apart from kube-system)
+2. Delete the cluster
+3. Delete the tagging lambda
+4. Check manually in AWS that all auxilary resources has been properly deleted (loadbalancers, volumes etc.)
 
 ## Configuration
 
