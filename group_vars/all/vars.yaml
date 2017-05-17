@@ -7,6 +7,14 @@ cluster_name: en341-k8s-qs
 #####
 # Mandatory AWS tags
 #####
+
+# Example:
+# tags:
+#   Creator: ab123
+#   CostCenter: 123456
+#   Product: MyProduct
+#   Environment: DEV
+
 tags:
   Creator: en341
   CostCenter: 665050
