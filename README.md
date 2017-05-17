@@ -61,8 +61,6 @@ This will delete the CloudFormation stack, the resources it created, the SSH key
 
 ## Install add-ons
 
-**TODO!!!**
-
 Currently, the supported add-ons are:
 * Kubernetes dashboard
 * Heapster for resource monitoring
