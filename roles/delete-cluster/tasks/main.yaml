@@ -37,3 +37,25 @@
     region: "{{ aws_region }}"
     state: absent
   with_file: "{{ ssh_public_key }}"
+
+# Delete the Route53 DNS record from Ingress (in case it exists)
+
+- route53:
+      command: get
+      zone: "{{ dns_zone }}"
+      private_zone: true
+      record: "ingress.{{ cluster_name }}.{{ dns_zone }}"
+      type: A
+  register: route53
+
+- route53:
+    command: delete
+    zone: "{{ dns_zone }}"
+    private_zone: true
+    record: "ingress.{{ cluster_name }}.{{ dns_zone }}"
+    value: "{{ route53.set.value }}"
+    type: A
+    alias: True
+    alias_hosted_zone_id: "{{ route53.set.alias_hosted_zone_id }}"
+    overwrite: True
+  when: route53.set.record is defined
