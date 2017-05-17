@@ -14,11 +14,10 @@ LOGGER.addHandler(log_handler)
 # Configuration
 region = "{{ aws_region}}"
 cluster = "{{ cluster_name }}"
-tag_Name = "{{ cluster_name }}-resource"
-tag_CostCenter = "{{ tags.CostCenter }}"
-tag_Product = "{{ tags.Product }}"
-tag_Creator = "{{ tags.Creator }}"
-tag_Environment = "{{ tags.Environment }}"
+setTags = {{ tags }}
+
+if 'Name' not in setTags.keys():
+    setTags['Name'] = "{{ cluster_name }}-resource"
 
 # Tag the resources ...
 def lambda_handler(event, context):
@@ -165,29 +164,35 @@ def lambda_handler(event, context):
 def prepare_new_tags(tags):
     newTags = []
 
-    if find_tag(tags, "Name") == None:
-        newTags.append({'Key': 'Name', 'Value': tag_Name})
+    for key, value in setTags.iteritems():
+        if key == 'Name' and find_tag(tags, key) == None:
+            newTags.append({'Key': key, 'Value': value})
+        elif find_tag(tags, key) != value:
+            newTags.append({'Key': key, 'Value': value})
 
-    #if find_tag(tags, "Application") != tag_Application:
-    #    newTags.append({'Key': 'Application', 'Value': tag_Application})
-
-    #if find_tag(tags, "Confidentiality") != tag_Confidentiality:
-    #    newTags.append({'Key': 'Confidentiality', 'Value': tag_Confidentiality})
-
-    if find_tag(tags, "CostCenter") != tag_CostCenter:
-        newTags.append({'Key': 'CostCenter', 'Value': tag_CostCenter})
-
-    if find_tag(tags, "Product") != tag_Product:
-        newTags.append({'Key': 'Product', 'Value': tag_Product})
-
-    #if find_tag(tags, "Owner") != tag_Owner:
-    #    newTags.append({'Key': 'Owner', 'Value': tag_Owner})
-
-    if find_tag(tags, "Creator") != tag_Creator:
-        newTags.append({'Key': 'Creator', 'Value': tag_Creator})
-
-    if find_tag(tags, "Environment") != tag_Environment:
-        newTags.append({'Key': 'Environment', 'Value': tag_Environment})
+    # if find_tag(tags, "Name") == None:
+    #     newTags.append({'Key': 'Name', 'Value': tag_Name})
+    #
+    # #if find_tag(tags, "Application") != tag_Application:
+    # #    newTags.append({'Key': 'Application', 'Value': tag_Application})
+    #
+    # #if find_tag(tags, "Confidentiality") != tag_Confidentiality:
+    # #    newTags.append({'Key': 'Confidentiality', 'Value': tag_Confidentiality})
+    #
+    # if find_tag(tags, "CostCenter") != tag_CostCenter:
+    #     newTags.append({'Key': 'CostCenter', 'Value': tag_CostCenter})
+    #
+    # if find_tag(tags, "Product") != tag_Product:
+    #     newTags.append({'Key': 'Product', 'Value': tag_Product})
+    #
+    # #if find_tag(tags, "Owner") != tag_Owner:
+    # #    newTags.append({'Key': 'Owner', 'Value': tag_Owner})
+    #
+    # if find_tag(tags, "Creator") != tag_Creator:
+    #     newTags.append({'Key': 'Creator', 'Value': tag_Creator})
+    #
+    # if find_tag(tags, "Environment") != tag_Environment:
+    #     newTags.append({'Key': 'Environment', 'Value': tag_Environment})
 
     return newTags
 

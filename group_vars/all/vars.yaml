@@ -18,9 +18,10 @@ kubeconfig_file: ~/.kube/config-en341-k8s-qs
 
 tags:
   Creator: en341
-  CostCenter: 665050
+  CostCenter: "665050"
   Product: Risk
   Environment: DEV
+  Jakub: Scholz
 
 #####
 # Remote access and security
