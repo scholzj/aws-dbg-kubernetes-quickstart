@@ -9,7 +9,7 @@
 - name: Delete Cloud Formation stack
   shell: "aws cloudformation delete-stack --stack-name {{ cluster_name }} --region {{ aws_region }} --output json"
 
-- name: Check if Cloud Formation stack is complete
+- name: Check if deeltion of Cloud Formation stack is complete
   shell: "aws cloudformation describe-stacks --stack-name {{ cluster_name }} --region {{ aws_region }} --output json | jq '.Stacks[0].StackStatus'"
   register: cmd_result
   until: (cmd_result.stderr.find('Stack with id') != -1 and cmd_result.stderr.find('does not exist') != -1) or cmd_result.stdout.find('DELETE_COMPLETE') != -1 or cmd_result.stdout.find('DELETE_FAILED') != -1
