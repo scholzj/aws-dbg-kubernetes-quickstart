@@ -8,4 +8,4 @@
   roles:
     - addons-dashboard
     - addons-heapster
-    #- addons-storage
+    - addons-storage-class
