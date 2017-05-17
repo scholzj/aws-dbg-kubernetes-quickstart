@@ -6,29 +6,29 @@
 
 # Render templates
 
-# - name: Ingress template
-#   template:
-#     src: ingress.yaml.j2
-#     dest: /tmp/ingress.yaml
-#     mode: 0644
-#   become: false
-#
-# - name: Add default backend template
-#   template:
-#     src: default-backend.yaml.j2
-#     dest: /tmp/default-backend.yaml
-#     mode: 0644
-#   become: false
-#
-# # Create default backend
-#
-# - name: Create default backend
-#   command: "kubectl --kubeconfig {{ kubeconfig_file }} create -f /tmp/default-backend.yaml"
-#
-# # Create ingress controller and default backend
-#
-# - name: Create ingress
-#   command: "kubectl --kubeconfig {{ kubeconfig_file }} create -f /tmp/ingress.yaml"
+- name: Ingress template
+  template:
+    src: ingress.yaml.j2
+    dest: /tmp/ingress.yaml
+    mode: 0644
+  become: false
+
+- name: Add default backend template
+  template:
+    src: default-backend.yaml.j2
+    dest: /tmp/default-backend.yaml
+    mode: 0644
+  become: false
+
+# Create default backend
+
+- name: Create default backend
+  command: "kubectl --kubeconfig {{ kubeconfig_file }} create -f /tmp/default-backend.yaml"
+
+# Create ingress controller and default backend
+
+- name: Create ingress
+  command: "kubectl --kubeconfig {{ kubeconfig_file }} create -f /tmp/ingress.yaml"
 
 # Create DNS record for the ingress service
 
