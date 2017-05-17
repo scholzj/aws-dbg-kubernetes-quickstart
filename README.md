@@ -60,7 +60,7 @@ The main configuration of the cluster is in the variables in `group_vars/all/var
 | `template_url` | DBG Role template URL used for the Cloud Formation stack | |
 | `iam_prefix` | DBG role / policy name prefix | `DBG-DEV-` |
 
-## Create IAM roles
+## IAM roles
 
 The IAM roles needed for the setup of this Kubernetes cluster can be created by running:
 ```
@@ -87,7 +87,7 @@ ansible-playbook delete-cluster.yaml
 
 This will delete the CloudFormation stack, the resources it created, the SSH key and the S3 bucket.
 
-## Install add-ons
+## Add-ons
 
 Currently, the supported add-ons are:
 * Kubernetes dashboard
@@ -99,7 +99,7 @@ To install the add-ons run
 ansible-playbook addons.yaml
 ```
 
-## Install ingress
+## Ingress
 
 Ingress can be used route inbound traffic from the outside of the Kubernetes cluster. It can be used for SSL termination, virtual hosts, load balancing etc. For more details about ingress, go to [Kubernetes website](https://kubernetes.io/docs/concepts/services-networking/ingress/).
 
@@ -110,7 +110,7 @@ ansible-playbook ingress.yaml
 
 After installation, the Ingress will be available under the hostname `ingress.<ClusterName>.<DNSZone>`.
 
-## Install and deleting the tagging lambda function
+## Tagging lambda
 
 The AWS Lambda function for tagging of resources (the related IAM and CloudWatch objects) can be also installed and uninstalled separately. To install it run:
 ```
