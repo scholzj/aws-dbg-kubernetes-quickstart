@@ -19,7 +19,7 @@
 
 # Delete S3 bucket
 
-- name: Create S3 bucket
+- name: Delete S3 bucket
   s3_bucket:
     name: "{{ cluster_name }}"
     state: absent
@@ -30,7 +30,7 @@
 
 # Delete SSH public key
 
-- name: Upload the SSH public key
+- name: Delete the SSH public key
   ec2_key:
     name: "{{ cluster_name }}"
     key_material: "{{ item }}"
