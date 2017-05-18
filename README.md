@@ -8,6 +8,7 @@ This repository contains the Ansible scripts for deploying a Kubernetes cluster 
 * [Configuration](#configuration)
 * [IAM roles](#iam-roles)
 * [Create cluster](#create-kubernetes-cluster)
+* [Use cluster](#use-kubernetes-cluster)
 * [Delete cluster](#delete-kubernetes-cluster)
 * [Add-ons](#add-ons)
 * [Ingress](#ingress)
@@ -20,6 +21,14 @@ This repository contains the Ansible scripts for deploying a Kubernetes cluster 
 * Install Ansible
 * Install kubectl (see below)
 * Install AWS CLI
+* Login to AWS, place credentials in env vars.
+* Install jq (json processor): 
+
+```
+sudo yum install jq
+```
+
+* create ~/.kube
 
 ## Installation
 
@@ -80,6 +89,15 @@ ansible-playbook create-cluster.yaml
 ```
 
 Cluster creation will generate a CloudFormation template. IT will upload this template to a newly created bucket. IT will create a new EC2 KeyPair based on the specified SSH key. Afterwards it will create the Cloud Formation stack and execute it.
+
+## Use Kubernetes cluster
+
+The cluster can be accessed via kubctl. A configfile is created during the setup. It can be advertised to kubectl via environment variable:
+
+```
+export KUBECONFIG=~/.kube/config-wk359-k8s-qs
+kubectl cluster-info  
+```
 
 ## Delete Kubernetes cluster
 
