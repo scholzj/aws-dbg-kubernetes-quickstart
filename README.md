@@ -218,7 +218,7 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: jakub-edit-default
-  namespace: default # This only grants permissions within the "development" namespace.
+  namespace: default # This only grants permissions within the "default" namespace.
 subjects:
 - kind: User
   name: jakub
