@@ -27,6 +27,8 @@ This repository contains the Ansible scripts for deploying a Kubernetes cluster 
 sudo yum install jq
 ```
 
+* create ~/.kube
+
 ## Installation
 
 1. Change the configuration (cluster name, tags, etc.)
