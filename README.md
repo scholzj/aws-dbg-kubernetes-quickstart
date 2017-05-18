@@ -230,3 +230,5 @@ roleRef:
 ```
 
 * For more details about the authorization, see the [Role-Based Access Control (RBAC) documentation](https://kubernetes.io/docs/admin/authorization/rbac).
+
+* Once you are finished, you just send the new config file to the new user. Just keep it secure :-)
