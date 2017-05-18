@@ -21,7 +21,7 @@ This repository contains the Ansible scripts for deploying a Kubernetes cluster 
 * Install Ansible
 * Install kubectl (see below)
 * Install AWS CLI
-* Login to AWS, place credentials in env vars.
+* Login to AWS, place credentials in env vars
 * Install jq (json processor): 
 
 ```
@@ -92,7 +92,7 @@ Cluster creation will generate a CloudFormation template. IT will upload this te
 
 ## Use Kubernetes cluster
 
-The cluster can be accessed via kubctl. A configfile is created during the setup. It can be advertised to kubectl via environment variable:
+The cluster can be accessed via kubectl. A config file is created during the setup. It can be advertised to kubectl via environment variable:
 
 ```
 export KUBECONFIG=~/.kube/config-wk359-k8s-qs
