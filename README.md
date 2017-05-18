@@ -20,6 +20,12 @@ This repository contains the Ansible scripts for deploying a Kubernetes cluster 
 * Install Ansible
 * Install kubectl (see below)
 * Install AWS CLI
+* Login to AWS, place credentials in env vars.
+* Install jq (json processor): 
+
+```
+sudo yum install jq
+```
 
 ## Installation
 
