@@ -12,7 +12,7 @@ This repository contains the Ansible scripts for deploying a Kubernetes cluster 
 * [Add-ons](#add-ons)
 * [Ingress](#ingress)
 * [Tagging Lambda](#tagging-lambda)
-* [Next steps](#nextsteps)
+* [Next steps](#next-steps)
   * [Creating additional users](#creating-additional-users)
 
 ## Prerequisites
