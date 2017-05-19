@@ -76,7 +76,7 @@ The main configuration of the cluster is in the variables in `group_vars/all/var
 
 The IAM roles needed for the setup of this Kubernetes cluster can be created by running:
 ```
-ansible-playbook create_roles.yaml
+ansible-playbook create-roles.yaml
 ```
 
 Because due to some useless security restrictions, we cannot delete the IAM roles and that makes the life complicated, this is a separate playbook instead of being part of the main playbook as would be more appropriate.
