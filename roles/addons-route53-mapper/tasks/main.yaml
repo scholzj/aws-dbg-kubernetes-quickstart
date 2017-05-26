@@ -1,0 +1,15 @@
+---
+
+####################
+# Install Route53 Mapper
+####################
+
+- name: Add Route53 mapper deployment configuration
+  template:
+    src: route53-mapper.yaml.j2
+    dest: /tmp/route53-mapper.yaml
+    mode: 0644
+  become: false
+
+- name: Launch Route53 mapper
+  command: "kubectl --kubeconfig {{ kubeconfig_file }} create -f /tmp/route53-mapper.yaml"

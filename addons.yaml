@@ -9,3 +9,4 @@
     - addons-dashboard
     - addons-heapster
     - addons-storage-class
+    - addons-route53-mapper
