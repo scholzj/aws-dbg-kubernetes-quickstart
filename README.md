@@ -22,7 +22,7 @@ This repository contains the Ansible scripts for deploying a Kubernetes cluster 
 * Install kubectl (see below)
 * Install AWS CLI
 * Login to AWS, place credentials in env vars
-* Install jq (json processor): 
+* Install jq (json processor):
 
 ```
 sudo yum install jq
@@ -148,3 +148,31 @@ ansible-playbook uninstall-lambda.yaml
 ### Creating additional users
 
 The guide how to add new user has been moved to my [blog](http://blog.effectivemessaging.com/2017/05/adding-users-on-quick-start-for.html).
+
+### Service with Type=LoadBalancer
+
+The Deutsche Boerse ProductDev account has no connection to the internet. Therefore all ELB load balancers have to be created as internal. To create the load balancer as internal, use following annotation for your service:
+
+```
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-internal: '0.0.0.0/0'
+```
+
+### DNS records
+
+The `addons.yaml` playbook will install several addons. One of them is the Route53 mapper. Route53 mapper allows you to create DNS records for your services directly from Kubernetes. To use it, you have to tag you service with tag `dns` and value `route53`:
+
+```
+  labels:
+    dns: route53
+    ...
+```
+
+And specify the desired domain name in annotation:
+
+```
+  annotations:
+    domainName: "ghost.dev.dbgcloud.io"
+```
+
+The Route53 mapper is periodically checking the services and creating the Route53 DNS records for them. The domain you can use in ProductDev AWS account is `dev.dbgcloud.io`. Once you delete the service, the Route53 mapper doesn't delete the Route53 records automatically. You have to do it on your own.
