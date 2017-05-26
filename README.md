@@ -15,6 +15,8 @@ This repository contains the Ansible scripts for deploying a Kubernetes cluster 
 * [Tagging Lambda](#tagging-lambda)
 * [Next steps](#next-steps)
   * [Creating additional users](#creating-additional-users)
+  * [Services with Type=LoadBalancer](#services-with-typeloadbalancer)
+  * [DNS records](#dns-records)
 
 ## Prerequisites
 
@@ -149,7 +151,7 @@ ansible-playbook uninstall-lambda.yaml
 
 The guide how to add new user has been moved to my [blog](http://blog.effectivemessaging.com/2017/05/adding-users-on-quick-start-for.html).
 
-### Service with Type=LoadBalancer
+### Services with Type=LoadBalancer
 
 The Deutsche Boerse ProductDev account has no connection to the internet. Therefore all ELB load balancers have to be created as internal. To create the load balancer as internal, use following annotation for your service:
 
