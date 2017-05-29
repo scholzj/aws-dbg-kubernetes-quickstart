@@ -61,5 +61,5 @@
   shell: "aws cloudformation describe-stacks --stack-name {{ cluster_name }} --region {{ aws_region }} --output json | jq '.Stacks[0].StackStatus'"
   register: cmd_result
   until: cmd_result.stdout.find('CREATE_COMPLETE') != -1 or cmd_result.stdout.find('ROLLBACK_COMPLETE') != -1
-  retries: 20
+  retries: 40
   delay: 30
