@@ -165,8 +165,9 @@ def prepare_new_tags(tags):
     newTags = []
 
     for key, value in setTags.iteritems():
-        if key == 'Name' and find_tag(tags, key) == None:
-            newTags.append({'Key': key, 'Value': value})
+        if key == 'Name':
+            if find_tag(tags, key) == None:
+                newTags.append({'Key': key, 'Value': value})
         elif find_tag(tags, key) != value:
             newTags.append({'Key': key, 'Value': value})
 
